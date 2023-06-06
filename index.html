@@ -8,12 +8,32 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <input type="text" id="countryInput" placeholder="Country">
-    <input type="text" id="stateInput" placeholder="State">
-    <input type="text" id="cityInput" placeholder="City">
-    <button id="submitButton">Submit</button>
+    <div id="weatherDisplay">
+      <div id="searchBar">
+        <input
+          type="text"
+          id="countryInput"
+          placeholder="Country"
+          class="inputBox"
+        />
+        <input
+          type="text"
+          id="stateInput"
+          placeholder="State"
+          class="inputBox"
+        />
+        <input type="text" id="cityInput" placeholder="City" class="inputBox" />
+        <button id="submitButton">Submit</button>
+      </div>
+      <div id="weatherInformation">
+        <h2 id="cityDisplay">Portsmouth</h2>
+        <div id="temp">80'F</div>
+        <img src="" alt="" id="icon" />
+        <div id="description">Cloudy</div>
+        <div id="humidity">Humidity: 60%</div>
+        <div id="wind">Wind speed: 10 mph</div>
+      </div>
+    </div>
     <script src="app.js"></script>
   </body>
-
-  
 </html>

@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Input 2: " + inputValues[1]);
     console.log("Input 3: " + inputValues[2]);
 
-    //Call other functions that use the values
     processValues();
 
     fetchLocationAndWeatherData();
@@ -30,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function processValues() {
-  //Access the stored values outside the event listener scope
   console.log("Using input values outside the event listener scope:");
   console.log("Input 1: " + inputValues[0]);
   console.log("Input 2: " + inputValues[1]);
@@ -38,6 +36,7 @@ function processValues() {
 }
 
 function fetchLocationAndWeatherData() {
+  //Stores the longitude and latitude
   let locationData = [];
 
   let geoPromise = fetch(
@@ -51,12 +50,12 @@ function fetchLocationAndWeatherData() {
     .then((locations) => {
       locations.forEach((location) => {
         const { lat, lon } = location;
-        //Gets the longitude and latitude and pushes it into the array
+        //Store the longitude and latitude and pushes it into the locationData array
         locationData.push({ lat, lon });
       });
 
       let weatherPromise = fetch(
-        `${WEATHER_URL}?lat=${locationData[0].lat}&lon=${locationData[0].lon}&appid=${WEATHER_KEY}`
+        `${WEATHER_URL}?lat=${locationData[0].lat}&lon=${locationData[0].lon}&appid=${WEATHER_KEY}&units=imperial`
       );
 
       weatherPromise
