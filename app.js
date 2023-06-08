@@ -17,16 +17,44 @@ document.addEventListener("DOMContentLoaded", function () {
     //Store the values in the inputValues array
     inputValues.push(countryInput, stateInput, cityInput);
 
-    //Send the values or perform any other actions with them
-    console.log("Input 1: " + inputValues[0]);
-    console.log("Input 2: " + inputValues[1]);
-    console.log("Input 3: " + inputValues[2]);
-
     processValues();
 
     fetchLocationAndWeatherData();
   }
 });
+
+//Used to capitalize the first leter of the description variable
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function displayWeatherInformation(weatherData) {
+  const cityDisplay = document.getElementById("cityDisplay");
+  const temp = document.getElementById("temp");
+  const icon = document.getElementById("icon");
+  const description = document.getElementById("description");
+  const humidity = document.getElementById("humidity");
+  const wind = document.getElementById("wind");
+
+  cityDisplay.textContent = weatherData.name;
+  temp.textContent = weatherData.main.temp + "°F";
+  icon.src =
+    "https://openweathermap.org/img/wn/" +
+    weatherData.weather[0].icon +
+    "@2x.png"; //Gets the display icon
+  description.textContent = weatherData.weather[0].description;
+  humidity.textContent = "Humidity: " + weatherData.main.humidity + "%";
+  wind.textContent = "Wind speed: " + weatherData.wind.speed + " mph";
+
+  const capitalizedDescription = capitalizeFirstLetter(
+    weatherData.weather[0].description
+  );
+  description.textContent = capitalizedDescription;
+
+  // Unhide the weatherInformation element
+  const weatherInformation = document.getElementById("weatherInformation");
+  weatherInformation.style.visibility = "visible";
+}
 
 function processValues() {
   console.log("Using input values outside the event listener scope:");
@@ -54,20 +82,18 @@ function fetchLocationAndWeatherData() {
         locationData.push({ lat, lon });
       });
 
-      let weatherPromise = fetch(
+      fetch(
         `${WEATHER_URL}?lat=${locationData[0].lat}&lon=${locationData[0].lon}&appid=${WEATHER_KEY}&units=imperial`
-      );
-
-      weatherPromise
+      )
         .then((response) => {
           return response.json();
         })
         .then((weather) => {
           console.log(weather);
+          displayWeatherInformation(weather);
         })
         .catch((err) => console.error(err));
-    })
-    .catch((err) => console.error(err));
 
-  console.log(locationData);
+      console.log(locationData);
+    });
 }
