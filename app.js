@@ -1,29 +1,73 @@
-const GEOCODE_URL = "http://api.openweathermap.org/geo/1.0/direct";
+const GEOCODE_URL = "https://api.openweathermap.org/geo/1.0/direct";
 const WEATHER_KEY = "63b4fdaa546262ddc31445c20dc351b7";
 const WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
 
-//Stores the values of the input given by the user
+// Stores the values of the input given by the user
 var inputValues = [];
 
 document.addEventListener("DOMContentLoaded", function () {
   var submitButton = document.getElementById("submitButton");
   submitButton.addEventListener("click", getValues);
 
+  var pinButtonContainer = document.getElementById("pinButtonContainer");
+  pinButtonContainer.style.display = "none"; // Hides the pin button container
+
   function getValues() {
     let countryInput = document.getElementById("countryInput").value;
     let stateInput = document.getElementById("stateInput").value;
     let cityInput = document.getElementById("cityInput").value;
 
-    //Store the values in the inputValues array
-    inputValues.push(countryInput, stateInput, cityInput);
+    pinButtonContainer.style.display = "block"; // Shows the pin button container after getValues is preformed
+
+    // Store the values in the inputValues array
+    inputValues = [countryInput, stateInput, cityInput];
 
     processValues();
 
     fetchLocationAndWeatherData();
   }
+
+  var pinButton = document.getElementById("pinButton");
+  pinButton.addEventListener("click", createWeatherCard);
+
+  function createWeatherCard() {
+    // Create a new card element
+    var card = document.createElement("div");
+    card.classList.add("card");
+
+    // Create elements for weather information
+    var cityDisplay = document.createElement("h2");
+    var temp = document.createElement("div");
+    var icon = document.createElement("img");
+    var description = document.createElement("div");
+    var humidity = document.createElement("div");
+    var wind = document.createElement("div");
+
+    // Set the content of weather information
+    cityDisplay.textContent =
+      document.getElementById("cityDisplay").textContent;
+    temp.textContent = document.getElementById("temp").textContent;
+    icon.src = document.getElementById("icon").src;
+    description.textContent =
+      document.getElementById("description").textContent;
+    humidity.textContent = document.getElementById("humidity").textContent;
+    wind.textContent = document.getElementById("wind").textContent;
+
+    // Appends weather information elements to the card
+    card.appendChild(cityDisplay);
+    card.appendChild(temp);
+    card.appendChild(icon);
+    card.appendChild(description);
+    card.appendChild(humidity);
+    card.appendChild(wind);
+
+    // Appends the card to the card container
+    var cardContainer = document.getElementById("cardContainer");
+    cardContainer.appendChild(card);
+  }
 });
 
-//Used to capitalize the first leter of the description variable
+// Used to capitalize the first letter of the description variable
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -51,7 +95,7 @@ function displayWeatherInformation(weatherData) {
   );
   description.textContent = capitalizedDescription;
 
-  // Unhide the weatherInformation element
+  // Unhides the weatherInformation element
   const weatherInformation = document.getElementById("weatherInformation");
   weatherInformation.style.visibility = "visible";
 }
@@ -64,7 +108,7 @@ function processValues() {
 }
 
 function fetchLocationAndWeatherData() {
-  //Stores the longitude and latitude
+  // Stores the longitude and latitude
   let locationData = [];
 
   let geoPromise = fetch(
@@ -78,7 +122,7 @@ function fetchLocationAndWeatherData() {
     .then((locations) => {
       locations.forEach((location) => {
         const { lat, lon } = location;
-        //Store the longitude and latitude and pushes it into the locationData array
+        // Stores the longitude and latitude and pushes it into the locationData array
         locationData.push({ lat, lon });
       });
 
