@@ -17,12 +17,7 @@ body {
   position: relative;
 }
 
-#weatherContent {
-  margin-bottom: 20px;
-}
-
 #searchBar {
-  margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,10 +96,9 @@ body {
 #pinPicture {
   width: 20px;
   height: 20px;
-  margin-right: 5px;
 }
 
-#cardContainer {
+#selectedAreas {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -139,4 +133,16 @@ body {
   font-size: 16px;
   color: rgb(102, 102, 102);
   margin-bottom: 10px;
+}
+
+.card button {
+  position: relative;
+  padding: 10px 10px;
+  font-size: 16px;
+  background-color: rgb(76, 175, 80);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
 }

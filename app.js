@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let stateInput = document.getElementById("stateInput").value;
     let cityInput = document.getElementById("cityInput").value;
 
-    pinButtonContainer.style.display = "block"; // Shows the pin button container after getValues is preformed
+    // Shows the pin button container after getValues is preformed
+    pinButtonContainer.style.display = "block";
 
     // Store the values in the inputValues array
     inputValues = [countryInput, stateInput, cityInput];
@@ -42,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var description = document.createElement("div");
     var humidity = document.createElement("div");
     var wind = document.createElement("div");
+    var deleteButton = document.createElement("button");
 
     // Set the content of weather information
     cityDisplay.textContent =
@@ -53,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
     humidity.textContent = document.getElementById("humidity").textContent;
     wind.textContent = document.getElementById("wind").textContent;
 
+    deleteButton.classList.add("deleteButton");
+    deleteButton.textContent = "Remove";
+
     // Appends weather information elements to the card
     card.appendChild(cityDisplay);
     card.appendChild(temp);
@@ -60,10 +65,22 @@ document.addEventListener("DOMContentLoaded", function () {
     card.appendChild(description);
     card.appendChild(humidity);
     card.appendChild(wind);
+    card.appendChild(deleteButton);
 
     // Appends the card to the card container
-    var cardContainer = document.getElementById("cardContainer");
+    var cardContainer = document.getElementById("selectedAreas");
     cardContainer.appendChild(card);
+
+    var deleteButtons = document.getElementsByClassName("deleteButton");
+    for (var i = 0; i < deleteButtons.length; i++) {
+      var deleteButton = deleteButtons[i];
+      deleteButton.addEventListener("click", deleteCard);
+    }
+    // Deletes the card you click the remove button on
+    function deleteCard() {
+      var card = this.parentNode;
+      cardContainer.removeChild(card);
+    }
   }
 });
 
