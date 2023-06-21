@@ -146,3 +146,31 @@ body {
   cursor: pointer;
   display: flex;
 }
+
+#savedHeaderBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  background-color:rgb(255, 255, 255);
+  max-width: 500px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+#refreshButton {
+  position: relative;
+  padding: 10px 10px;
+  font-size: 16px;
+  background-color: rgb(76, 175, 80);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  margin: 0 20px;
+}
+
+#savedBarHeader {
+  margin-left: 20px;
+}

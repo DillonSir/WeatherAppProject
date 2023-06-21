@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var humidity = document.createElement("div");
     var wind = document.createElement("div");
     var deleteButton = document.createElement("button");
+    var dateTime = document.createElement("div");
 
     // Set the content of weather information
     cityDisplay.textContent =
@@ -65,11 +66,25 @@ document.addEventListener("DOMContentLoaded", function () {
     card.appendChild(description);
     card.appendChild(humidity);
     card.appendChild(wind);
+    card.appendChild(dateTime);
     card.appendChild(deleteButton);
 
     // Appends the card to the card container
     var cardContainer = document.getElementById("selectedAreas");
     cardContainer.appendChild(card);
+
+    // Gets the information to display the date and time
+    var today = new Date();
+    var date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+    var time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTimeString = date + " " + time;
+    dateTime.textContent = "Last update: " + dateTimeString;
 
     var deleteButtons = document.getElementsByClassName("deleteButton");
     for (var i = 0; i < deleteButtons.length; i++) {
