@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let stateInput = document.getElementById("stateInput").value;
     let cityInput = document.getElementById("cityInput").value;
 
-    // Shows the pin button container after getValues is preformed
     pinButtonContainer.style.display = "block";
 
     // Store the values in the inputValues array
@@ -36,17 +35,34 @@ document.addEventListener("DOMContentLoaded", function () {
     var card = document.createElement("div");
     card.classList.add("card");
 
-    // Create elements for weather information
-    var cityDisplay = document.createElement("h2");
-    var temp = document.createElement("div");
-    var icon = document.createElement("img");
-    var description = document.createElement("div");
-    var humidity = document.createElement("div");
-    var wind = document.createElement("div");
-    var deleteButton = document.createElement("button");
-    var dateTime = document.createElement("div");
+    // Set the input values as data attributes on the card
+    card.dataset.country = document.getElementById("countryInput").value;
+    card.dataset.state = document.getElementById("stateInput").value;
+    card.dataset.city = document.getElementById("cityInput").value;
 
-    // Set the content of weather information
+    // Create elements for the weather information
+    var cityDisplay = document.createElement("h2");
+    cityDisplay.id = "cityDisplay";
+    var temp = document.createElement("div");
+    temp.id = "temp";
+    var icon = document.createElement("img");
+    icon.id = "icon";
+    var description = document.createElement("div");
+    description.id = "description";
+    var humidity = document.createElement("div");
+    humidity.id = "humidity";
+    var wind = document.createElement("div");
+    wind.id = "wind";
+    var deleteButton = document.createElement("button");
+    deleteButton.classList.add("deleteButton");
+    deleteButton.textContent = "Remove";
+    var dateTime = document.createElement("div");
+    dateTime.id = "dateTime";
+    var refreshButton = document.createElement("button");
+    refreshButton.classList.add("refreshButton");
+    refreshButton.textContent = "Refresh";
+
+    // Set the content of the weather information
     cityDisplay.textContent =
       document.getElementById("cityDisplay").textContent;
     temp.textContent = document.getElementById("temp").textContent;
@@ -59,6 +75,9 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteButton.classList.add("deleteButton");
     deleteButton.textContent = "Remove";
 
+    refreshButton.classList.add("refreshButton");
+    refreshButton.textContent = "Refresh";
+
     // Appends weather information elements to the card
     card.appendChild(cityDisplay);
     card.appendChild(temp);
@@ -68,12 +87,13 @@ document.addEventListener("DOMContentLoaded", function () {
     card.appendChild(wind);
     card.appendChild(dateTime);
     card.appendChild(deleteButton);
+    card.appendChild(refreshButton);
 
     // Appends the card to the card container
     var cardContainer = document.getElementById("selectedAreas");
     cardContainer.appendChild(card);
 
-    // Gets the information to display the date and time
+    // Displays the date and time
     var today = new Date();
     var date =
       today.getFullYear() +
@@ -91,6 +111,65 @@ document.addEventListener("DOMContentLoaded", function () {
       var deleteButton = deleteButtons[i];
       deleteButton.addEventListener("click", deleteCard);
     }
+
+    // Updates the weather information on the card
+    refreshButton.addEventListener("click", function () {
+      var card = this.parentNode;
+      var country = card.dataset.country;
+      var state = card.dataset.state;
+      var city = card.dataset.city;
+
+      fetch(
+        `${GEOCODE_URL}?q=${city},${state},${country}&limit=7&appid=${WEATHER_KEY}`
+      )
+        .then((response) => response.json())
+        .then((locations) => {
+          if (locations.length > 0) {
+            const { lat, lon } = locations[0];
+            return fetch(
+              `${WEATHER_URL}?lat=${lat}&lon=${lon}&appid=${WEATHER_KEY}&units=imperial`
+            );
+          } else {
+            throw new Error("Location not found");
+          }
+        })
+        .then((response) => response.json())
+        .then((weather) => {
+          card.querySelector("#cityDisplay").textContent = weather.name;
+          card.querySelector("#temp").textContent = weather.main.temp + "°F";
+          card.querySelector("#icon").src =
+            "https://openweathermap.org/img/wn/" +
+            weather.weather[0].icon +
+            "@2x.png";
+          card.querySelector("#description").textContent =
+            capitalizeFirstLetter(weather.weather[0].description);
+          card.querySelector("#humidity").textContent =
+            "Humidity: " + weather.main.humidity + "%";
+          card.querySelector("#wind").textContent =
+            "Wind speed: " + weather.wind.speed + " mph";
+
+          var today = new Date();
+          var date =
+            today.getFullYear() +
+            "-" +
+            (today.getMonth() + 1) +
+            "-" +
+            today.getDate();
+          var time =
+            today.getHours() +
+            ":" +
+            today.getMinutes() +
+            ":" +
+            today.getSeconds();
+          var dateTimeString = date + " " + time;
+          card.querySelector("#dateTime").textContent =
+            "Last update: " + dateTimeString;
+        })
+        .catch((error) => {
+          console.error("Error refreshing weather information:", error);
+        });
+    });
+
     // Deletes the card you click the remove button on
     function deleteCard() {
       var card = this.parentNode;
@@ -130,13 +209,6 @@ function displayWeatherInformation(weatherData) {
   // Unhides the weatherInformation element
   const weatherInformation = document.getElementById("weatherInformation");
   weatherInformation.style.visibility = "visible";
-}
-
-function processValues() {
-  console.log("Using input values outside the event listener scope:");
-  console.log("Input 1: " + inputValues[0]);
-  console.log("Input 2: " + inputValues[1]);
-  console.log("Input 3: " + inputValues[2]);
 }
 
 function fetchLocationAndWeatherData() {
