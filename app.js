@@ -22,8 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Store the values in the inputValues array
     inputValues = [countryInput, stateInput, cityInput];
 
-    processValues();
-
     fetchLocationAndWeatherData();
   }
 
